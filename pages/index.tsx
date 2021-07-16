@@ -2,11 +2,22 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 import axios from 'axios';
 import SeriesFeed from '../components/SeriesFeed';
 import Header from '../components/Header';
-
+import { useEffect } from 'react';
 import Navigatior from '../components/Navigatior';
+import { useStateValue } from '../StateProvider';
+import { actionTypes } from '../reducer';
 
 export default function Home({ tv_shows, page, pageNo }) {
   const [session] = useSession();
+  const [, dispatch] = useStateValue();
+
+  useEffect(() => {
+    if (localStorage.user) {
+      dispatch({
+        type: actionTypes.LOAD_USER,
+      });
+    }
+  }, [dispatch]);
 
   return (
     <div className='bg-gray-900'>

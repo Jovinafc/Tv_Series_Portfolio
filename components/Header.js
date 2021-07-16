@@ -2,18 +2,40 @@ import React, { useEffect } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import db from '../firebase';
+import { auth } from '../firebase';
 import { useDispatch } from 'react-redux';
 import { getWatchedList } from '../slices/watchedlistSlice';
 import firebase from 'firebase/app';
+import { useStateValue } from '../StateProvider';
+import { actionTypes } from '../reducer';
 
 function Header() {
   const router = useRouter();
   const [session] = useSession();
+  const [{ user }, dispatch] = useStateValue();
   const userRef = db.collection(`users`);
-
+  console.log(user);
   console.log(session);
 
-  const dispatch = useDispatch();
+  const signWithGoogle = () => {
+    auth
+      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then((result) => {
+        console.log(result);
+        dispatch({
+          type: actionTypes.LOGIN,
+          user: result.user,
+        });
+      });
+  };
+
+  const signOutUser = () => {
+    dispatch({
+      type: actionTypes.LOGOUT,
+    });
+  };
+
+  // const dispatch = useDispatch();
 
   // useEffect(() => {
   //   if (session) {
@@ -77,16 +99,24 @@ function Header() {
       </div>
 
       <div className='ml-auto flex space-x-3'>
-        {session ? (
-          <p className='hidden sm:flex'>Welcome, {session.user.name}</p>
+        {user ? (
+          <p className='hidden sm:flex'>Welcome, {user.displayName}</p>
         ) : null}
 
-        {session ? (
-          <p className='cursor-pointer' onClick={signOut}>
+        {user ? (
+          <p
+            className='cursor-pointer'
+            // onClick={signOut}
+            onClick={signOutUser}
+          >
             Sign Out
           </p>
         ) : (
-          <p className='cursor-pointer' onClick={signIn}>
+          <p
+            className='cursor-pointer'
+            // onClick={signIn}
+            onClick={signWithGoogle}
+          >
             Sign In
           </p>
         )}
