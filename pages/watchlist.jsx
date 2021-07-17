@@ -6,19 +6,22 @@ import { getWatchedList, watchedSeries } from '../slices/watchedlistSlice';
 import db from '../firebase';
 import WatchedSeries from '../components/WatchedSeries';
 import router from 'next/router';
+import { useStateValue } from '../StateProvider';
+import { actionTypes } from '../reducer';
 
 function watchlist() {
   const [session] = useSession();
-  const dispatch = useDispatch();
+  const [, dispatch] = useStateValue();
+  const dispatchSlice = useDispatch();
   const watched = useSelector(watchedSeries);
-
   console.log(watched);
 
   useEffect(() => {
     let watchedList = [];
 
-    if (session) {
-      db.collection(`users/${session.user.email}/watched`)
+    if (localStorage.user) {
+      let user = JSON.parse(localStorage.getItem('user'));
+      db.collection(`users/${user.uid}/watched`)
         .orderBy('timeStamp', 'desc')
         .get()
         .then((snapshot) => {
@@ -27,10 +30,28 @@ function watchlist() {
           });
         })
         .then((res) => {
-          dispatch(getWatchedList({ watchedList }));
+          dispatch({
+            type: actionTypes.LOAD_USER,
+          });
+          dispatchSlice(getWatchedList({ watchedList }));
         });
     }
-  }, [session]);
+
+    if (localStorage.user) {
+      // let user = JSON.parse(localStorage.getItem('user'));
+      // db.collection(`users/${user.uid}/watched`)
+      //   .orderBy('timeStamp', 'desc')
+      //   .get()
+      //   .then((snapshot) => {
+      //     snapshot.forEach((doc) => {
+      //       watchedList.push({ id: doc.id, data: doc.data() });
+      //     });
+      //   })
+      //   .then((res) => {
+      //     dispatch(getWatchedList({ watchedList }));
+      //   });
+    }
+  }, [dispatch]);
 
   return (
     <div className='bg-gray-900'>

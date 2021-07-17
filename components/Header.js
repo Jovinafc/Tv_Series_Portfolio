@@ -3,39 +3,45 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import db from '../firebase';
 import { auth } from '../firebase';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getWatchedList } from '../slices/watchedlistSlice';
 import firebase from 'firebase/app';
 import { useStateValue } from '../StateProvider';
 import { actionTypes } from '../reducer';
+import { userData, login, logout } from '../slices/userSlice';
 
 function Header() {
   const router = useRouter();
-  const [session] = useSession();
-  const [{ user }, dispatch] = useStateValue();
-  const userRef = db.collection(`users`);
+  const user = useSelector(userData);
+  const dispatch = useDispatch();
   console.log(user);
-  console.log(session);
+  const userRef = db.collection(`users`);
 
   const signWithGoogle = () => {
     auth
       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then((result) => {
         console.log(result);
-        dispatch({
-          type: actionTypes.LOGIN,
-          user: result.user,
+        // dispatch({
+        //   type: actionTypes.LOGIN,
+        //   user: result.user,
+        // });
+        dispatch(login({ user: result.user }));
+        return userRef.doc(result.user.uid).set({
+          uid: result.user.uid,
+          name: result.user.displayName,
+          photo: result.user.photoURL,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
       });
   };
 
   const signOutUser = () => {
-    dispatch({
-      type: actionTypes.LOGOUT,
-    });
+    // dispatch({
+    //   type: actionTypes.LOGOUT,
+    // });
+    dispatch(logout({}));
   };
-
-  // const dispatch = useDispatch();
 
   // useEffect(() => {
   //   if (session) {
@@ -104,19 +110,11 @@ function Header() {
         ) : null}
 
         {user ? (
-          <p
-            className='cursor-pointer'
-            // onClick={signOut}
-            onClick={signOutUser}
-          >
+          <p className='cursor-pointer' onClick={signOutUser}>
             Sign Out
           </p>
         ) : (
-          <p
-            className='cursor-pointer'
-            // onClick={signIn}
-            onClick={signWithGoogle}
-          >
+          <p className='cursor-pointer' onClick={signWithGoogle}>
             Sign In
           </p>
         )}

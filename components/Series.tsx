@@ -9,31 +9,31 @@ import { addToWatchedList } from '../slices/watchedlistSlice';
 import { addToWishList } from '../slices/wishlistSlice';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { useStateValue } from '../StateProvider';
 import { addToWatched, addToWish } from '../HelperFunctions/add';
 
 const Series = ({ series }) => {
   const router = useRouter();
   const [session] = useSession();
-  const dispatch = useDispatch();
 
-  const addToWatchedSeries = async () => {
-    const items = await addToWatched(series, session);
-    if (items !== 'Already Present') {
-      dispatch(addToWatchedList({ items }));
-    } else {
-      alert('Already Present');
-    }
-    return items;
-  };
+  // const addToWatchedSeries = async () => {
+  //   const items = await addToWatched(series, user);
+  //   if (items !== 'Already Present') {
+  //     dispatch(addToWatchedList({ items }));
+  //   } else {
+  //     alert('Already Present');
+  //   }
+  //   return items;
+  // };
 
-  const addToWishedSeries = async () => {
-    const items = await addToWish(series, session);
-    if (items !== 'Already Present') {
-      dispatch(addToWishList({ items }));
-    } else {
-      alert('Already Present');
-    }
-  };
+  // const addToWishedSeries = async () => {
+  //   const items = await addToWish(series, session);
+  //   if (items !== 'Already Present') {
+  //     dispatch(addToWishList({ items }));
+  //   } else {
+  //     alert('Already Present');
+  //   }
+  // };
 
   return (
     <div className='bg-gray-600 m-4 p-2 text-center cursor-pointer text-white'>
@@ -48,13 +48,13 @@ const Series = ({ series }) => {
       <div>
         <button
           className='bg-yellow-300 text-sm text-black p-2 m-2'
-          onClick={addToWishedSeries}
+          // onClick={addToWishedSeries}
         >
           Add to Wishlist
         </button>
         <button
           className='bg-yellow-300 text-sm text-black p-2'
-          onClick={addToWatchedSeries}
+          // onClick={addToWatchedSeries}
         >
           Watched
         </button>

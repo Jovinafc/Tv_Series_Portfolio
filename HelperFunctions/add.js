@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { addToWatchedList } from '../slices/watchedlistSlice';
 import { addToWishList } from '../slices/wishlistSlice';
 
-export const addToWatched = async (series, session) => {
+export const addToWatched = async (series, user) => {
   //   let items;
   let data = {
     tv_series_name: series.name,
@@ -14,7 +14,7 @@ export const addToWatched = async (series, session) => {
   };
   let exists = false;
   await db
-    .collection(`users/${session.user.email}/watched`)
+    .collection(`users/${user.uid}/watched`)
     .where('tv_series_id', '==', series.id)
     .get()
     .then(function (querySnapshot) {
@@ -25,9 +25,7 @@ export const addToWatched = async (series, session) => {
   if (exists) {
     return 'Already Present';
   } else {
-    const res = await db
-      .collection(`users/${session.user.email}/watched`)
-      .add(data);
+    const res = await db.collection(`users/${user.uid}/watched`).add(data);
     const itemsTemp = {
       id: res.id,
       data: data,

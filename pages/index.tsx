@@ -6,16 +6,16 @@ import { useEffect } from 'react';
 import Navigatior from '../components/Navigatior';
 import { useStateValue } from '../StateProvider';
 import { actionTypes } from '../reducer';
+import { useDispatch } from 'react-redux';
+import { load_user } from '../slices/userSlice';
 
 export default function Home({ tv_shows, page, pageNo }) {
   const [session] = useSession();
-  const [, dispatch] = useStateValue();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (localStorage.user) {
-      dispatch({
-        type: actionTypes.LOAD_USER,
-      });
+      dispatch(load_user({}));
     }
   }, [dispatch]);
 
