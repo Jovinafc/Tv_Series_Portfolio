@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/client';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/Header';
@@ -7,15 +6,15 @@ import { wishlistSeries, getWishList } from '../slices/wishlistSlice';
 import WishlistSeries from '../components/WishlistSeries';
 
 function wishlist() {
-  const [session] = useSession();
   const dispatch = useDispatch();
   const wished = useSelector(wishlistSeries);
 
   useEffect(() => {
     let wishlist = [];
 
-    if (session) {
-      db.collection(`users/${session.user.email}/wishlist`)
+    if (localStorage.user) {
+      let user = JSON.parse(localStorage.getItem('user'));
+      db.collection(`users/${user.uid}/wishlist`)
         .orderBy('timeStamp', 'desc')
         .get()
         .then((snapshot) => {
@@ -27,7 +26,7 @@ function wishlist() {
           dispatch(getWishList({ wishlist }));
         });
     }
-  }, [session]);
+  }, []);
 
   return (
     <div className='bg-gray-900'>

@@ -1,31 +1,21 @@
 import React, { useEffect } from 'react';
-import { signIn, signOut, useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import db from '../firebase';
 import { auth } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
-import { getWatchedList } from '../slices/watchedlistSlice';
 import firebase from 'firebase/app';
-import { useStateValue } from '../StateProvider';
-import { actionTypes } from '../reducer';
 import { userData, login, logout } from '../slices/userSlice';
 
 function Header() {
   const router = useRouter();
   const user = useSelector(userData);
   const dispatch = useDispatch();
-  console.log(user);
   const userRef = db.collection(`users`);
 
   const signWithGoogle = () => {
     auth
       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then((result) => {
-        console.log(result);
-        // dispatch({
-        //   type: actionTypes.LOGIN,
-        //   user: result.user,
-        // });
         dispatch(login({ user: result.user }));
         return userRef.doc(result.user.uid).set({
           uid: result.user.uid,
@@ -37,9 +27,6 @@ function Header() {
   };
 
   const signOutUser = () => {
-    // dispatch({
-    //   type: actionTypes.LOGOUT,
-    // });
     dispatch(logout({}));
   };
 

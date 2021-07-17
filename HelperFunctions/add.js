@@ -30,12 +30,11 @@ export const addToWatched = async (series, user) => {
       id: res.id,
       data: data,
     };
-    console.log(itemsTemp);
     return itemsTemp;
   }
 };
 
-export const addToWish = async (series, session) => {
+export const addToWish = async (series, user) => {
   let data = {
     tv_series_name: series.name,
     tv_series_id: series.id,
@@ -44,7 +43,7 @@ export const addToWish = async (series, session) => {
   };
   let exists = false;
   await db
-    .collection(`users/${session.user.email}/wishlist`)
+    .collection(`users/${user.uid}/wishlist`)
     .where('tv_series_id', '==', series.id)
     .get()
     .then(function (querySnapshot) {
@@ -55,9 +54,7 @@ export const addToWish = async (series, session) => {
   if (exists) {
     return 'Already Present';
   } else {
-    const res = await db
-      .collection(`users/${session.user.email}/wishlist`)
-      .add(data);
+    const res = await db.collection(`users/${user.uid}/wishlist`).add(data);
     const items = {
       id: res.id,
       data: data,

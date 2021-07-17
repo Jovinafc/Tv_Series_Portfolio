@@ -10,9 +10,7 @@ import { useStateValue } from '../StateProvider';
 import { actionTypes } from '../reducer';
 
 function watchlist() {
-  const [session] = useSession();
-  const [, dispatch] = useStateValue();
-  const dispatchSlice = useDispatch();
+  const dispatch = useDispatch();
   const watched = useSelector(watchedSeries);
   console.log(watched);
 
@@ -21,6 +19,7 @@ function watchlist() {
 
     if (localStorage.user) {
       let user = JSON.parse(localStorage.getItem('user'));
+      console.log(user);
       db.collection(`users/${user.uid}/watched`)
         .orderBy('timeStamp', 'desc')
         .get()
@@ -28,12 +27,7 @@ function watchlist() {
           snapshot.forEach((doc) => {
             watchedList.push({ id: doc.id, data: doc.data() });
           });
-        })
-        .then((res) => {
-          dispatch({
-            type: actionTypes.LOAD_USER,
-          });
-          dispatchSlice(getWatchedList({ watchedList }));
+          dispatch(getWatchedList({ watchedList }));
         });
     }
 
@@ -51,7 +45,7 @@ function watchlist() {
       //     dispatch(getWatchedList({ watchedList }));
       //   });
     }
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className='bg-gray-900'>

@@ -2,18 +2,18 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import db from '../firebase';
-// import { useDispatch } from 'react-redux';
-import { useStateValue } from '../StateProvider';
+import { useDispatch, useSelector } from 'react-redux';
+import { userData } from '../slices/userSlice';
 import { removeFromWatchList } from '../slices/watchedlistSlice';
 
 const WatchedSeries = ({ series }) => {
   const router = useRouter();
-  const [{ user }, dispatch] = useStateValue();
-  const seriesRef = db.collection(`users/${user.uid}/watched`);
-  // const dispatch = useDispatch();
+  const user = useSelector(userData);
+  const dispatch = useDispatch();
 
   const removeWatched = async (id) => {
-    await seriesRef
+    await db
+      .collection(`users/${user.uid}/watched`)
       .doc(id)
       .delete()
       .then((res) => {

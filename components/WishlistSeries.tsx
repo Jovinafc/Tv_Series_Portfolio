@@ -2,18 +2,19 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import db from '../firebase';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from 'next-auth/client';
 import { removeFromWishList } from '../slices/wishlistSlice';
+import { userData } from '../slices/userSlice';
 
 const WishlistSeries = ({ series }) => {
-  const [session] = useSession();
   const router = useRouter();
-  const seriesRef = db.collection(`users/${session.user.email}/wished`);
+  const user = useSelector(userData);
   const dispatch = useDispatch();
 
   const removeWished = async (id) => {
-    await seriesRef
+    await db
+      .collection(`users/${user.uid}/wishlist`)
       .doc(id)
       .delete()
       .then((res) => {

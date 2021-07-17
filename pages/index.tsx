@@ -39,6 +39,10 @@ export async function getServerSideProps(context) {
       list = res.data;
     });
 
+  // let res = await fetch('https://www.episodate.com/api/most-popular?page=1');
+  // // list = await res.json();
+  // console.log(res);
+
   return {
     props: {
       page: list.page,
