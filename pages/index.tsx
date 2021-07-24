@@ -2,6 +2,7 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 import axios from 'axios';
 import SeriesFeed from '../components/SeriesFeed';
 import Header from '../components/Header';
+import Alert from '../components/Alert';
 import { useEffect } from 'react';
 import Navigatior from '../components/Navigatior';
 import { useStateValue } from '../StateProvider';
@@ -11,17 +12,12 @@ import { load_user } from '../slices/userSlice';
 
 export default function Home({ tv_shows, page, pageNo }) {
   const [session] = useSession();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (localStorage.user) {
-      dispatch(load_user({}));
-    }
-  }, [dispatch]);
+  // const dispatch = useDispatch();
 
   return (
     <div className='bg-gray-900'>
       <Header />
+      <Alert />
       <main className='max-w-screen-lg mx-auto'>
         <SeriesFeed tv_shows={tv_shows} />
         <Navigatior first={true} pageNo={pageNo} />

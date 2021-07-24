@@ -33,10 +33,15 @@ function wishlist() {
       <Header />
       <main className='max-w-screen-lg mx-auto min-h-screen h-auto'>
         {wished.length > 0 ? (
-          <div className='grid grid-flow-row-dense md:grid-cols-2 lg:grid-cols-4'>
-            {wished.map((watch) => (
-              <WishlistSeries series={watch} />
-            ))}
+          <div>
+            <div className='text-white text-3xl p-2 ml-2'>
+              No of Series in your wishlist - {wished.length}
+            </div>
+            <div className='grid grid-flow-row-dense md:grid-cols-2 lg:grid-cols-4'>
+              {wished.map((watch) => (
+                <WishlistSeries series={watch} />
+              ))}
+            </div>
           </div>
         ) : (
           <div className='text-white p-5'>

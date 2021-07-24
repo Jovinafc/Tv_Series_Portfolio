@@ -1,18 +1,15 @@
 import React, { useEffect } from 'react';
 import Header from '../components/Header';
-import { useSession } from 'next-auth/client';
 import { useDispatch, useSelector } from 'react-redux';
 import { getWatchedList, watchedSeries } from '../slices/watchedlistSlice';
 import db from '../firebase';
 import WatchedSeries from '../components/WatchedSeries';
 import router from 'next/router';
-import { useStateValue } from '../StateProvider';
-import { actionTypes } from '../reducer';
 
 function watchlist() {
   const dispatch = useDispatch();
   const watched = useSelector(watchedSeries);
-  console.log(watched);
+  // console.log(watched);
 
   useEffect(() => {
     let watchedList = [];
@@ -29,21 +26,6 @@ function watchlist() {
           });
           dispatch(getWatchedList({ watchedList }));
         });
-    }
-
-    if (localStorage.user) {
-      // let user = JSON.parse(localStorage.getItem('user'));
-      // db.collection(`users/${user.uid}/watched`)
-      //   .orderBy('timeStamp', 'desc')
-      //   .get()
-      //   .then((snapshot) => {
-      //     snapshot.forEach((doc) => {
-      //       watchedList.push({ id: doc.id, data: doc.data() });
-      //     });
-      //   })
-      //   .then((res) => {
-      //     dispatch(getWatchedList({ watchedList }));
-      //   });
     }
   }, []);
 

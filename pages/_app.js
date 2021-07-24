@@ -21,13 +21,9 @@ Router.events.on('routeChangeError', progress.finish);
 
 function MyApp({ Component, pageProps }) {
   return (
-    // <AuthProvider session={pageProps.session}>
-    // <StateProvider initialState={initialState} reducer={reducer}>
     <Provider store={store}>
       <Component {...pageProps} />
     </Provider>
-    // </StateProvider>
-    // </AuthProvider>
   );
 }
 

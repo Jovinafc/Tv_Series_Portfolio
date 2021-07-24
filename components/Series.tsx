@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import db from '../firebase';
@@ -8,6 +8,7 @@ import { addToWishList } from '../slices/wishlistSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToWatched, addToWish } from '../HelperFunctions/add';
 import { userData } from '../slices/userSlice';
+import { setAlert } from '../slices/alertSlice';
 
 const Series = ({ series }) => {
   const router = useRouter();
@@ -16,21 +17,48 @@ const Series = ({ series }) => {
   const dispatch = useDispatch();
 
   const addToWatchedSeries = async () => {
-    const items = await addToWatched(series, user);
-    if (items !== 'Already Present') {
-      dispatch(addToWatchedList({ items }));
+    if (user) {
+      const items = await addToWatched(series, user);
+      if (items !== 'Already Present') {
+        dispatch(addToWatchedList({ items }));
+      } else {
+        dispatch(
+          setAlert({
+            alert_type: 'Danger',
+            alert_message: 'Series already added in Watched List.',
+          })
+        );
+      }
     } else {
-      alert('Already Present');
+      dispatch(
+        setAlert({
+          alert_type: 'Danger',
+          alert_message: 'Kindly Sign In to add.',
+        })
+      );
     }
-    return items;
   };
 
   const addToWishedSeries = async () => {
-    const items = await addToWish(series, user);
-    if (items !== 'Already Present') {
-      dispatch(addToWishList({ items }));
+    if (user) {
+      const items = await addToWish(series, user);
+      if (items !== 'Already Present') {
+        dispatch(addToWishList({ items }));
+      } else {
+        dispatch(
+          setAlert({
+            alert_type: 'Danger',
+            alert_message: 'Series already added in Wished List.',
+          })
+        );
+      }
     } else {
-      alert('Already Present');
+      dispatch(
+        setAlert({
+          alert_type: 'Danger',
+          alert_message: 'Kindly Sign In to add.',
+        })
+      );
     }
   };
 

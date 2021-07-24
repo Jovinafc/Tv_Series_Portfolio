@@ -4,7 +4,7 @@ import db from '../firebase';
 import { auth } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import firebase from 'firebase/app';
-import { userData, login, logout } from '../slices/userSlice';
+import { userData, login, logout, load_user } from '../slices/userSlice';
 
 function Header() {
   const router = useRouter();
@@ -12,17 +12,30 @@ function Header() {
   const dispatch = useDispatch();
   const userRef = db.collection(`users`);
 
+  useEffect(() => {
+    if (localStorage.user) {
+      dispatch(load_user({}));
+    }
+  }, [dispatch]);
+
   const signWithGoogle = () => {
     auth
       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then((result) => {
         dispatch(login({ user: result.user }));
-        return userRef.doc(result.user.uid).set({
-          uid: result.user.uid,
-          name: result.user.displayName,
-          photo: result.user.photoURL,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
+        console.log(result);
+        userRef
+          .doc(result.user.uid)
+          .set({
+            uid: result.user.uid,
+            name: result.user.displayName,
+            photo: result.user.photoURL,
+            email: result.user.email,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+          .then((data) => {
+            console.log(data);
+          });
       });
   };
 
