@@ -5,6 +5,7 @@ import db from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { userData } from '../slices/userSlice';
 import { removeFromWatchList } from '../slices/watchedlistSlice';
+import { setAlert } from '../slices/alertSlice';
 
 const WatchedSeries = ({ series }) => {
   const router = useRouter();
@@ -19,6 +20,12 @@ const WatchedSeries = ({ series }) => {
       .then((res) => {
         console.log(res);
         dispatch(removeFromWatchList({ id }));
+        dispatch(
+          setAlert({
+            alert_type: 'Success',
+            alert_message: 'Series Removed',
+          })
+        );
       });
   };
 

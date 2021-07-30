@@ -3,9 +3,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import db from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSession } from 'next-auth/client';
 import { removeFromWishList } from '../slices/wishlistSlice';
 import { userData } from '../slices/userSlice';
+import { setAlert } from '../slices/alertSlice';
 
 const WishlistSeries = ({ series }) => {
   const router = useRouter();
@@ -20,6 +20,12 @@ const WishlistSeries = ({ series }) => {
       .then((res) => {
         console.log(res);
         dispatch(removeFromWishList({ id }));
+        dispatch(
+          setAlert({
+            alert_type: 'Success',
+            alert_message: 'Series Removed',
+          })
+        );
       });
   };
 

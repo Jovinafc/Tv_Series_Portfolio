@@ -11,12 +11,18 @@ const Alert = () => {
     dispatch(removeAlert({}));
   };
 
+  setTimeout(() => dispatch(removeAlert({})), 4000);
+
   return (
     <div
       //class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'
       className={
-        alert.alertDisplay
+        alert.alertDisplay && alert.alertType == 'Danger'
           ? `bg-red-100 border w-3/12 border-red-400 bottom-1 right-1 text-red-700 px-4 py-3 rounded fixed z-10`
+          : alert.alertDisplay && alert.alertType == 'Success'
+          ? `bg-green-100 border w-3/12 border-green-400 bottom-1 right-1 text-green-700 px-4 py-3 rounded fixed z-10`
+          : alert.alertDisplay && alert.alertType == 'Warning'
+          ? `bg-yellow-100 border w-3/12 border-yellow-400 bottom-1 right-1 text-yellow-700 px-4 py-3 rounded fixed z-10`
           : 'hidden'
       }
       role='alert'
@@ -27,7 +33,7 @@ const Alert = () => {
         onClick={closeAlert}
       >
         <svg
-          class='fill-current h-6 w-6 text-red-500'
+          class='fill-current h-6 w-6 text-black-500'
           role='button'
           xmlns='http://www.w3.org/2000/svg'
           viewBox='0 0 20 20'

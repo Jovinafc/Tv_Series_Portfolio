@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/Header';
+import Alert from '../components/Alert';
 import db from '../firebase';
 import { wishlistSeries, getWishList } from '../slices/wishlistSlice';
 import WishlistSeries from '../components/WishlistSeries';
@@ -31,6 +32,7 @@ function wishlist() {
   return (
     <div className='bg-gray-900'>
       <Header />
+      <Alert />
       <main className='max-w-screen-lg mx-auto min-h-screen h-auto'>
         {wished.length > 0 ? (
           <div>

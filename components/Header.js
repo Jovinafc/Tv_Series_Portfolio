@@ -5,6 +5,7 @@ import { auth } from '../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import firebase from 'firebase/app';
 import { userData, login, logout, load_user } from '../slices/userSlice';
+import { LogoutIcon } from '@heroicons/react/outline';
 
 function Header() {
   const router = useRouter();
@@ -43,41 +44,6 @@ function Header() {
     dispatch(logout({}));
   };
 
-  // useEffect(() => {
-  //   if (session) {
-  //     console.log(session);
-  //     userRef
-  //       .doc(session.user.email)
-  //       .set({
-  //         email: session.user.email,
-  //         name: session.user.name,
-  //         photo: session.user.image,
-  //         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-  //       })
-  //       .then((result) => {
-  //         console.log('Result Saved: ', result);
-  //       })
-  //       .catch((err) => {
-  //         console.log('Error: ', err);
-  //       });
-  //   }
-  // }, [session]);
-
-  // const getWatched = () => {
-  //   let watchedList = [];
-  //   db.collection(`users/${session.user.email}/watched`)
-  //     .orderBy('timeStamp', 'desc')
-  //     .get()
-  //     .then((snapshot) => {
-  //       console.log(snapshot);
-  //       snapshot.forEach((doc) => {
-  //         watchedList.push({ id: doc.id, data: doc.data() });
-  //       });
-  //     })
-  //     .then((res) => {
-  //       dispatch(getWatchedList({ watchedList }));
-  //     });
-  // };
   return (
     <header className='flex sticky items-center top-0 z-50 bg-black text-yellow-300 p-5'>
       <div className='md:ml-10'>
@@ -106,12 +72,15 @@ function Header() {
 
       <div className='ml-auto flex space-x-3'>
         {user ? (
-          <p className='hidden sm:flex'>Welcome, {user.displayName}</p>
+          <p className='hidden sm:flex'>
+            Welcome, {user.displayName.split(' ')[0]}
+          </p>
         ) : null}
 
         {user ? (
           <p className='cursor-pointer' onClick={signOutUser}>
-            Sign Out
+            {/* <LogoutIcon className='h-12 p-2' /> */}
+            Log out
           </p>
         ) : (
           <p className='cursor-pointer' onClick={signWithGoogle}>

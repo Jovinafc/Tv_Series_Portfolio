@@ -4,6 +4,7 @@ import Input from '../components/Input';
 import axios from 'axios';
 import { SearchIcon } from '@heroicons/react/outline';
 import SeriesFeed from '../components/SeriesFeed';
+import Alert from '../components/Alert';
 
 const explore = () => {
   const [searchName, setSearchName] = useState<string>('');
@@ -22,6 +23,7 @@ const explore = () => {
   return (
     <div className='bg-gray-900'>
       <Header />
+      <Alert />
       <main className='max-w-screen-lg mx-auto min-h-screen h-auto'>
         {/* <Input /> */}
         <div className='flex mt-5 items-center h-10 rounded bg-yellow-400 cursor-pointer flex-grow hover:bg-yellow-500'>

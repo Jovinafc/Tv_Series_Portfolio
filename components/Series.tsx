@@ -21,6 +21,12 @@ const Series = ({ series }) => {
       const items = await addToWatched(series, user);
       if (items !== 'Already Present') {
         dispatch(addToWatchedList({ items }));
+        dispatch(
+          setAlert({
+            alert_type: 'Success',
+            alert_message: 'Added Successfully..',
+          })
+        );
       } else {
         dispatch(
           setAlert({
@@ -44,6 +50,12 @@ const Series = ({ series }) => {
       const items = await addToWish(series, user);
       if (items !== 'Already Present') {
         dispatch(addToWishList({ items }));
+        dispatch(
+          setAlert({
+            alert_type: 'Success',
+            alert_message: 'Added Successfully..',
+          })
+        );
       } else {
         dispatch(
           setAlert({
