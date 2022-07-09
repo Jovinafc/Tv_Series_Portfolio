@@ -12,8 +12,6 @@ export default function Home({ tv_shows, page, pageNo }) {
   const [session] = useSession();
   const modal = useSelector(modalData);
 
-  console.log(modal.modal_display);
-
   return (
     <div className='bg-gray-900'>
       <Header />
