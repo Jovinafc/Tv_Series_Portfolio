@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { alertData, removeAlert } from '../slices/alertSlice';
 
@@ -11,7 +11,12 @@ const Alert = () => {
     dispatch(removeAlert({}));
   };
 
-  setTimeout(() => dispatch(removeAlert({})), 4000);
+  useEffect(() => {
+    const id = setTimeout(() => dispatch(removeAlert({})), 3000);
+    return () => {
+      clearTimeout(id);
+    };
+  }, [alert]);
 
   return (
     <div
@@ -29,7 +34,7 @@ const Alert = () => {
     >
       <span class='block sm:inline'>{alert.alertMessage}</span>
       <span
-        class='absolute top-0 bottom-0 right-0 px-4 py-3'
+        className='absolute top-0 bottom-0 right-0 px-4 py-3'
         onClick={closeAlert}
       >
         <svg

@@ -6,10 +6,14 @@ import db from '../firebase';
 import Alert from '../components/Alert';
 import WatchedSeries from '../components/WatchedSeries';
 import router from 'next/router';
+import Modal from '../components/Modal';
+import { modalData } from '../slices/modalSlice';
 
 function watchlist() {
   const dispatch = useDispatch();
   const watched = useSelector(watchedSeries);
+  const modal = useSelector(modalData);
+
   // console.log(watched);
 
   useEffect(() => {
@@ -62,6 +66,7 @@ function watchlist() {
           </div>
         )}
       </main>
+      {modal.modal_display ? <Modal /> : null}
     </div>
   );
 }

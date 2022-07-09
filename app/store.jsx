@@ -4,6 +4,7 @@ import watchedReducer from '../slices/watchedlistSlice';
 import wishlistReducer from '../slices/wishlistSlice';
 import userReducer from '../slices/userSlice';
 import alertReducer from '../slices/alertSlice';
+import modalSlice from '../slices/modalSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     wishlist: wishlistReducer,
     user: userReducer,
     alert: alertReducer,
+    modal: modalSlice,
   },
   middleware: getDefaultMiddleware({
     serializableCheck: false,

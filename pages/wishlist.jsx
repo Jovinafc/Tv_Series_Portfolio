@@ -5,9 +5,13 @@ import Alert from '../components/Alert';
 import db from '../firebase';
 import { wishlistSeries, getWishList } from '../slices/wishlistSlice';
 import WishlistSeries from '../components/WishlistSeries';
+import Modal from '../components/Modal';
+import { modalData } from '../slices/modalSlice';
 
 function wishlist() {
   const dispatch = useDispatch();
+  const modal = useSelector(modalData);
+
   const wished = useSelector(wishlistSeries);
 
   useEffect(() => {
@@ -53,6 +57,7 @@ function wishlist() {
           </div>
         )}
       </main>
+      {modal.modal_display ? <Modal /> : null}
     </div>
   );
 }

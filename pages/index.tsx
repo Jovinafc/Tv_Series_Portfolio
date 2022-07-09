@@ -1,18 +1,18 @@
-import { signIn, signOut, useSession } from 'next-auth/client';
+import { useSession } from 'next-auth/client';
 import axios from 'axios';
 import SeriesFeed from '../components/SeriesFeed';
 import Header from '../components/Header';
 import Alert from '../components/Alert';
-import { useEffect } from 'react';
+import Modal from '../components/Modal';
+import { useSelector, useDispatch } from 'react-redux';
 import Navigatior from '../components/Navigatior';
-import { useStateValue } from '../StateProvider';
-import { actionTypes } from '../reducer';
-import { useDispatch } from 'react-redux';
-import { load_user } from '../slices/userSlice';
+import { modalData } from '../slices/modalSlice';
 
 export default function Home({ tv_shows, page, pageNo }) {
   const [session] = useSession();
-  // const dispatch = useDispatch();
+  const modal = useSelector(modalData);
+
+  console.log(modal.modal_display);
 
   return (
     <div className='bg-gray-900'>
@@ -22,6 +22,7 @@ export default function Home({ tv_shows, page, pageNo }) {
         <SeriesFeed tv_shows={tv_shows} />
         <Navigatior first={true} pageNo={pageNo} />
       </main>
+      {modal.modal_display ? <Modal /> : null}
     </div>
   );
 }
@@ -31,13 +32,8 @@ export async function getServerSideProps(context) {
   await axios
     .get('https://www.episodate.com/api/most-popular?page=1')
     .then((res) => {
-      // console.log(res.data);
       list = res.data;
     });
-
-  // let res = await fetch('https://www.episodate.com/api/most-popular?page=1');
-  // // list = await res.json();
-  // console.log(res);
 
   return {
     props: {
